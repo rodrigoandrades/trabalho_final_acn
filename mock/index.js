@@ -1,15 +1,17 @@
+// https://cloud.google.com/iot/docs/how-tos/credentials/keys
 var fs = require('fs'); 
 var jwt = require('jsonwebtoken'); 
 var mqtt = require('mqtt'); 
  
-var projectId = 'eighth-jigsaw-219600'; 
+//var projectId = 'PUC-MINAS'; 
+var projectId = 'eighth-jigsaw-219600';
 var cloudRegion = 'us-central1'; 
-var registryId = 'my-registry'; 
+var registryId = 'my-registry '; 
 var deviceId = 'my-device'; 
  
 var mqttHost = 'mqtt.googleapis.com'; 
-var mqttPort = 443; 
-var privateKeyFile = '../certs/rsa_private.pem'; 
+var mqttPort = 8883; 
+var privateKeyFile = './rsa_private.pem'; 
 var algorithm = 'RS256'; 
 var messageType = 'state'; // state or event 
  
@@ -24,7 +26,8 @@ var connectionArgs = {
   password: createJwt(projectId, privateKeyFile, algorithm),
   protocol: 'mqtts', 
   secureProtocol: 'TLSv1_2_method',
-  protocolVersion: 4
+  ca: fs.readFileSync('roots.pem'),
+  rejectUnauthorized: false
 }; 
  
 console.log('connecting...'); 
@@ -32,6 +35,8 @@ var client = mqtt.connect(connectionArgs);
  
 // Subscribe to the /devices/{device-id}/config topic to receive config updates. 
 client.subscribe('/devices/' + deviceId + '/my-device-events'); 
+// client.subscribe(`projects/${projectId}/topics/my-device-events`);
+
  
 client.on('connect', function(success) { 
   if (success) { 
@@ -49,23 +54,23 @@ client.on('close', function() {
 client.on('error', function(err) { 
   console.log('error', err); 
 }); 
- 
+
 client.on('message', function(topic, message, packet) { 
   console.log(topic, 'message received: ', Buffer.from(message, 'base64').toString('ascii')); 
 }); 
- 
+
 function createJwt(projectId, privateKeyFile, algorithm) { 
   var token = { 
     'iat': parseInt(Date.now() / 1000), 
     'exp': parseInt(Date.now() / 1000) + 86400 * 60, // 1 day 
     'aud': projectId 
   }; 
-  var privateKey = fs.readFileSync(privateKeyFile, 'utf8'); 
+  var privateKey = fs.readFileSync(privateKeyFile); 
   return jwt.sign(token, privateKey, { 
     algorithm: algorithm
   }); 
 } 
- 
+
 function fetchData() { 
   var readout = dht.read(); 
   var temp = readout.temperature.toFixed(2); 
