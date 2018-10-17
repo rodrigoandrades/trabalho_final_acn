@@ -1,20 +1,90 @@
-// https://cloud.google.com/iot/docs/how-tos/credentials/keys
 var fs = require('fs'); 
 var jwt = require('jsonwebtoken'); 
 var mqtt = require('mqtt'); 
  
-//var projectId = 'PUC-MINAS'; 
 var projectId = 'eighth-jigsaw-219600';
 var cloudRegion = 'us-central1'; 
-var registryId = 'my-registry '; 
-var deviceId = 'my-device'; 
+var registryId = 'my-registry'; 
+var deviceId = 'my-node-device'; 
  
 var mqttHost = 'mqtt.googleapis.com'; 
-var mqttPort = 8883; 
-var privateKeyFile = './rsa_private.pem'; 
+var mqttPort = 443; 
+var privateKeyFile = './certs/rsa_private.pem'; 
 var algorithm = 'RS256'; 
-var messageType = 'state'; // state or event 
+var messageType = 'events'; // state or events
+
+
+const mqttClientId = `projects/${projectId}/locations/${cloudRegion}/registries/${registryId}/devices/${deviceId}`;
+let mqttTopic = `/devices/${deviceId}/${messageType}`;
+
+let connectionArgs = {
+  host: mqttHost,
+  port: mqttPort,
+  clientId: mqttClientId,
+  username: 'unused',
+  password: createJwt(projectId, privateKeyFile, algorithm),
+  protocol: 'mqtts',
+  secureProtocol: 'TLSv1_2_method'
+};
+
+let client = mqtt.connect(connectionArgs);
+
+client.on('connect', (success) => {
+  if (success) { 
+    console.log('Client connected...'); 
+    sendData(); 
+  } else { 
+    console.log('Client not connected...'); 
+  } 
+});
+
+client.on('close', () => {
+  console.log('close');
+});
+
+client.on('error', (err) => {
+  console.log('error', err);
+});
+
+client.on('message', (topic, message, packet) => {
+  console.log('message received: ', Buffer.from(message, 'base64').toString('ascii'));
+});
+
+client.on('packetsend', () => {
+  console.log('packetsend')
+});
+
+function createJwt (projectId, privateKeyFile, algorithm) {
+  const token = {
+    'iat': parseInt(Date.now() / 1000),
+    'exp': parseInt(Date.now() / 1000) + 20 * 60, // 20 minutes
+    'aud': projectId
+  };
+  const privateKey = fs.readFileSync(privateKeyFile);
+  return jwt.sign(token, privateKey, { algorithm: algorithm });
+}
+
+function sendData() { 
+  var payload = {
+    'temp': 1,
+    'humd': 1,
+    'time': new Date().toISOString().slice(0, 19).replace('T', ' ') // https://stackoverflow.com/a/11150727/1015046 
+  }
  
+  payload = JSON.stringify(payload); 
+  console.log(mqttTopic, ': Publishing message:', payload);
+  client.publish(mqttTopic, payload, { qos: 1 });
+ 
+  console.log('Transmitting in 30 seconds');
+  setTimeout(sendData, 30000);
+}
+
+
+
+
+
+
+/*
 var mqttClientId = `projects/${projectId}/locations/${cloudRegion}/registries/${registryId}/devices/${deviceId}`;
 var mqttTopic = `/devices/${deviceId}/${messageType}`;
  
@@ -93,3 +163,4 @@ function sendData() {
   console.log('Transmitting in 30 seconds'); 
   setTimeout(sendData, 30000); 
 }
+*/
