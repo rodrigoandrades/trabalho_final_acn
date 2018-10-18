@@ -9,7 +9,7 @@ var deviceId = 'my-node-device';
  
 var mqttHost = 'mqtt.googleapis.com'; 
 var mqttPort = 443; 
-var privateKeyFile = './certs/rsa_private.pem'; 
+var privateKeyFile = '../certs/rsa_private.pem'; 
 var algorithm = 'RS256'; 
 var messageType = 'events'; // state or events
 
