@@ -1,2 +1,5 @@
 node_modules
 .sonarlint
+.env
+PUC-MINAS-1ba1b76c6213.json
+./package-lock.json
