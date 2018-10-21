@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'); 
 var jwt = require('jsonwebtoken'); 
 var mqtt = require('mqtt'); 
