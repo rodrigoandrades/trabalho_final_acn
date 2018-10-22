@@ -2,6 +2,12 @@
 
 require('dotenv').config()
 
+const check = require('./check');
+
+check({
+  batimentos: 132
+});
+
 const PubSub = require('@google-cloud/pubsub');
 
 const projectId = 'eighth-jigsaw-219600';
