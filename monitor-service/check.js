@@ -1,10 +1,42 @@
 let check = (dados) => {
-  console.log(dados)
+  let result = {
+    success: true,
+    message: ''
+  }
+
+  if (!dados.batimentos) {
+    result.success = false
+    return `Dados de batimento do Paciente não disponível`
+  }
+
+  if (dados.batimentos < 60) {
+    result.success = false
+    result.message = `Paciente com bradicardia, valor: ${dados.batimentos}`
+  }
+
+  if (dados.batimentos > 100) {
+    result.success = false
+    result.message = `Paciente com taquicardia, valor: ${dados.batimentos}`
+  }
+
+  
+  
+  if (!dados.pressao) {
+    result.success = false
+    result.message = `Dados da pressão do Paciente não disponível`
+  }
+
+  if (dados.pressao.sistolica > 140 || dados.pressao.diastolica > 90) {
+    result.success = false
+    result.message = `Paciente com pressão alta, valor: ${dados.pressao.sistolica + '/' + dados.pressao.diastolica}`
+  }
+
+  if (dados.pressao.sistolica < 100 || dados.pressao.diastolica < 60) {
+    result.success = false
+    result.message = `Paciente com pressão baixa, valor: ${dados.pressao.sistolica + '/' + dados.pressao.diastolica}`
+  }
+
+  return result
 }
 
 module.exports = check
-
-/*
-A frequência cardíaca normal, em repouso, varia entre 60 e 100 batimentos por minuto (bpm). Quando os batimentos cardíacos estão acelerados, acima de 100 bpm, a pessoa está com taquicardia. Uma frequência cardíaca baixa, inferior a 60 bpm, é considerada bradicardia.
-Quando esta pressão está acima de 14/9 a pressão é considerada alta, quando está abaixo de 10/6 os valores são considerados baixos
-*/
