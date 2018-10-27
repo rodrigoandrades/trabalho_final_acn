@@ -18,9 +18,15 @@ A comunicação entre as partes deve ser segura. Opcionalmente, você pode criar
 Foi utilizado a nuvem Google para o desenvolvimento deste trabalho, a seguir os passos necessários para criar e 'rodar' o projeto.
 
  1. Criar conta na google cloud, https://console.cloud.google.com
+
  2. Criar projeto, https://cloud.google.com/resource-manager/docs/creating-managing-projects
+
  3. Tutorial google para criar registro e dispositivo no google cloud iot-core, https://cloud.google.com/iot/docs/quickstart
+
  4. Criando Registro
+
 ![Criação do registro](./resources/create-registry.png)
+
  5. Criando Dispositivo
-![Criação do registro](./resources/create-device.png)
+
+![Criação do dispositivo](./resources/create-device.png)
