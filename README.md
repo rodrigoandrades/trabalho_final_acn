@@ -19,14 +19,41 @@ Foi utilizado a nuvem Google para o desenvolvimento deste trabalho, a seguir os 
 
  1. Criar conta na google cloud, https://console.cloud.google.com
 
- 2. Criar projeto, https://cloud.google.com/resource-manager/docs/creating-managing-projects
+ 2. Tutorial google para criar projeto, https://cloud.google.com/resource-manager/docs/creating-managing-projects
 
  3. Tutorial google para criar registro e dispositivo no google cloud iot-core, https://cloud.google.com/iot/docs/quickstart
 
- 4. Criando Registro
+ 4. Criar um Registro
 
 ![Criação do registro](./resources/create-registry.png)
 
- 5. Criando Dispositivo
+ 5. Criar Certificado
+```
+openssl req -x509 -newkey rsa:2048 -keyout rsa_private.pem -nodes -out rsa_cert.pem -subj "/CN=unused"
+openssl ecparam -genkey -name prime256v1 -noout -out ec_private.pem
+openssl ec -in ec_private.pem -pubout -out ec_public.pem
+```
+ 6. Criar um dispositivo
 
 ![Criação do dispositivo](./resources/create-device.png)
+
+ 7. Criar uma Assinatura
+
+![Criação do dispositivo](./resources/create-sub.png)
+
+ 8. Criar cluster kubernetes, documentação google: https://cloud.google.com/kubernetes-engine/docs/quickstart
+
+ 9. cluster criado
+ ![Cluster kubernetes](./resources/cluster.png)
+
+ 10. Publicar aplicação "monitor" no dockerhub
+ ```
+ $ docker login
+ $ cd monitor-service
+ $ docker build -t monitor .
+ $ docker tag monitor randrades/monitor
+ $ docker push randrades/monitor
+ ```
+
+ 11. Publicar aplicação "monitor" no cluster kubernetes Google
+ ![Implantação](./resources/implantacao.png)

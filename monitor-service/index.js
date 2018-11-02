@@ -1,17 +1,15 @@
 'use strict';
 
+console.log('Inicializando...'); 
+
 require('dotenv').config()
 
 const check = require('./check');
 
-check({
-  batimentos: 132
-});
-
 const PubSub = require('@google-cloud/pubsub');
 
 const projectId = 'eighth-jigsaw-219600';
-const subscriberName = 'my-sub';
+const subscriberName = 'sub-paciente';
 
 const pubsub = new PubSub({
   projectId: projectId,
@@ -20,15 +18,17 @@ const pubsub = new PubSub({
 var subscription = pubsub.subscription('projects/' + projectId + '/subscriptions/' + subscriberName); 
 
 var messageHandler = function(message) { 
-  console.log('Message Begin >>>>>>>>'); 
-  console.log('message.connectionId', message.connectionId); 
-  console.log('message.attributes', message.attributes); 
-  console.log('message.data', Buffer.from(message.data, 'base64').toString('ascii')); 
-  console.log('Message End >>>>>>>>>>'); 
- 
-  // "Ack" (acknowledge receipt of) the message 
+  console.log('Mensagem recebida');
+  var payload = Buffer.from(message.data, 'base64').toString('ascii');
+
+  console.log('Checando mensagem');
+  console.log(payload);
+  console.log(check(JSON.parse(payload)));
+  
   message.ack(); 
 }; 
  
 // Listen for new messages 
 subscription.on('message', messageHandler);
+
+console.log('Inicializado'); 
