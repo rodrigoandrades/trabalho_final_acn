@@ -1,6 +1,10 @@
 # Arquitetura de Nuvem
 
-
+### Grupo
+ * Bruno Ferreira
+ * Diego Menezes
+ * Rodrigo Andrades
+ 
 ## Sistema Hospitalar
 
 Você irá fazer uma prova de conceito que deve usar os serviços Docker e Kubernetes para emular a monitoração de dados vitais de pacientes.
