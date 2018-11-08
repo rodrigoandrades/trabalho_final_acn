@@ -57,3 +57,6 @@ openssl ec -in ec_private.pem -pubout -out ec_public.pem
 
  11. Publicar aplicação "monitor" no cluster kubernetes Google
  ![Implantação](./resources/implantacao.png)
+
+ 12. Teste local
+ ![Implantação](./resources/ex01.gif)

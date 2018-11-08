@@ -12,18 +12,26 @@ const projectId = 'eighth-jigsaw-219600';
 const subscriberName = 'sub-paciente';
 
 const pubsub = new PubSub({
-  projectId: projectId,
+  projectId: projectId
 });
 
 var subscription = pubsub.subscription('projects/' + projectId + '/subscriptions/' + subscriberName); 
 
-var messageHandler = function(message) { 
+var messageHandler = (message) => { 
+  console.log('--------------------------------------------------------');
   console.log('Mensagem recebida');
   var payload = Buffer.from(message.data, 'base64').toString('ascii');
 
-  console.log('Checando mensagem');
+  console.log('Checando mensagem:');
   console.log(payload);
-  console.log(check(JSON.parse(payload)));
+  let result = check(JSON.parse(payload));
+
+  if(!result.success){
+    console.log('DISPARAR ALARME');
+    console.log(result.message);
+  } else {
+    console.log('Parâmetros OK.');
+  }
   
   message.ack(); 
 }; 

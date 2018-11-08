@@ -34,7 +34,7 @@ let client = mqtt.connect(connectionArgs);
 client.on('connect', (success) => {
   if (success) { 
     console.log('Client connected...'); 
-    sendData(); 
+    sendData();
   } else { 
     console.log('Client not connected...'); 
   } 
@@ -72,7 +72,7 @@ function sendData() {
  
   payload = JSON.stringify(payload); 
   console.log(mqttTopic, ': Publishing message:', payload);
-  client.publish(mqttTopic, payload, { qos: 1 });
+  client.publish(mqttTopic, payload, { qos: 0 });
   client.end();
   //console.log('Transmitting in 30 seconds');
   //setTimeout(sendData, 30000);
