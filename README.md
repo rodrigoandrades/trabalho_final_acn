@@ -59,4 +59,7 @@ openssl ec -in ec_private.pem -pubout -out ec_public.pem
  ![Implantação](./resources/implantacao.png)
 
  12. Teste local
- ![Implantação](./resources/ex-01.gif)
+ ![Teste local](./resources/ex-01.gif)
+
+ 13. Teste Google
+ ![Teste Google](./resources/ex-02.gif)
