@@ -78,4 +78,26 @@ describe('Testa parâmetros do paciente', () => {
             }
         }).success, false);
     });
+
+
+
+    it('Testa VO2 normal', () => {
+        assert.equal(check({
+            vo2: 23
+        }).success, true);
+
+        assert.equal(check({
+            vo2: 15
+        }).success, true);
+    });
+
+    it('Testa VO2 anormal', () => {
+        assert.equal(check({
+            vo2: 17
+        }).success, false);
+
+        assert.equal(check({
+            vo2: 19
+        }).success, false);
+    });
 });
